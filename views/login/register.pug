@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    .container.mx-auto.pt-4 
+      form.w-full.max-w-md.bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8(method='POST' action='/register')
+        |
+        - if(error){
+        .bg-red-lightest.border.border-red-light.text-red-dark.px-4.py-3.rounded.relative(role='alert') #{error}
+        - }
+        |
+        - if(info){
+        .bg-green-lightest.border.border-green-light.text-green-dark.px-4.py-3.rounded.relative(role='alert') #{info}
+        - }   
+        .text-center
+          label.block.font-bold.text-grey-darker.text-xl.mb-6.mt-4
+            | REGISTER
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.text-left.mb-1.mb-0.pr-4
+              | Username
+          .col
+            input#username.bg-purple-lightest.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "username" value = susername)
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.text-left.mb-1.mb-0.pr-4
+              | Email
+          .col
+            input#email.bg-purple-lightest.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "email" value = semail)
+        .flex.items-center.mb-6
+          .col-4
+          .col
+            button.shadow.bg-purple.text-white.font-bold.py-2.px-4.rounded(class='hover:bg-purple-light', type='submit' , value='submit') Register
+            a.text-blue.text-left.mb-1.mb-0.pr-4.ml-6(href='/login')
+              | Back to login

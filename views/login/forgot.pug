@@ -1,0 +1,27 @@
+html
+  head
+    link(href='https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
+  body.bg-grey
+    .container.mx-auto.pt-4 
+      form.w-full.max-w-md.bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8(method='POST' action='/forgot')
+        |
+        - if(info){
+          .bg-green-lightest.border.border-green-light.text-green-dark.px-4.py-3.rounded.relative(role='alert') #{info}
+        - }   
+        |
+        - if(error){
+          .bg-red-lightest.border.border-red-light.text-red-dark.px-4.py-3.rounded.relative(role='alert') #{error}
+        - }
+        .text-center
+          label.block.font-bold.text-grey-darker.text-xl.mb-6.mt-4
+            | FORGOT PASSWORD
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.text-left.mb-1.mb-0.pr-4
+              | Email
+          .col
+            input#email.bg-purple-lightest.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "email" value = semail)
+        button.shadow.bg-purple.text-white.font-bold.py-2.px-4.rounded(class='hover:bg-purple-light', type='submit' , value='submit') Reset Password
+        a.text-blue.text-left.mb-1.mb-0.pr-4.ml-6(href='/login')
+          | Back to login

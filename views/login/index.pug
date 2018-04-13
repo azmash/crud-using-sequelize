@@ -1,0 +1,44 @@
+extends layout
+
+block content
+    form.w-full.max-w-md.bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8(method='POST' action='/signin')
+      a(href = '/homepage')  < back to homepage
+      |
+      - if(success){
+      .bg-green-lightest.border.border-green-light.text-red-dark.px-4.py-3.rounded.relative(role='alert') #{success}
+      - }
+      .text-center
+        label.block.text-grey-darker.text-xl.font-bold.mb-6.mt-4
+          | LOGIN
+      .flex.items-center.mb-6
+        .col-4
+          label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+            | USERNAME
+        .col
+          input#username.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "username")
+      .flex.items-center.mb-6
+        .col-4
+          label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4
+            | PASSWORD
+        .col
+          input#password.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "password" type = 'password' )      
+      .flex.items-center.mb-6
+        .col-4
+        .col
+          |
+          - if(message){
+          .text-red-dark.text-sm.italic.px-4.py-3.rounded.relative(role='alert') #{message}
+          - }
+          button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
+            | LOGIN    
+          a.text-blue.font-bold.text-left.mb-1.mb-0.pr-4(href='/forgot')
+            | Forgot Password? 
+      .flex.items-center.mb-6
+        .col-4
+        .col
+          a.text-blue.text-left.mb-1.mb-0.pr-2.font-bold
+              | Doesn't have Account? 
+          a.text-blue.text-left.mb-1.mb-0.pr-4(href='/register')
+              | Register 
+
+

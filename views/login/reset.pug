@@ -1,0 +1,51 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(href='https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
+    script(type='text/javascript', src='https://www.gstatic.com/charts/loader.js')
+    script.
+      var check = function() {
+        if (document.getElementById('password').value ==
+          document.getElementById('confirm_password').value) {
+          document.getElementById('message').style.color = 'green';
+          document.getElementById('message').innerHTML = 'matching';
+        } else {
+          document.getElementById('message').style.color = 'red';
+          document.getElementById('message').innerHTML = 'not matching';
+        }
+      }
+  body.bg-grey
+    form.w-full.max-w-md.bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8(method='POST')
+      .text-center
+        label.block.text-grey-darker.text-xl.font-bold.mb-6.mt-4
+          | RESET PASSWORD
+      .flex.items-center.mb-6
+        .col-4
+          label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+            | Username
+        .col
+          input#username.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "username" value=susername readonly)          
+      .flex.items-center.mb-6
+        .col-4
+          label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+            | New Password
+        .col
+          input#password.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "password" type = "password" onkeyup='check();' )
+      .flex.items-center.mb-6
+        .col-4
+          label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4
+            | Confirm Password
+        .col
+          input#confirm_password.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "cpassword" type = 'password' onkeyup='check();')  
+          span#message
+      .flex.items-center.mb-6
+        .col-4
+        .col
+          |
+          - if(message){
+          p(style='color:red') #{message}
+          - }
+          button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
+            | UPDATE PASSWORD

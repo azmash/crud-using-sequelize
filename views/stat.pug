@@ -1,0 +1,46 @@
+extends layout
+
+block content
+    .container.text-center.pt-8.min-w-full
+      form.w-full.max-w-xl.bg-grey-lightest.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8(action='/stat/' method='GET')
+        h1.text-grey-dark.mt-4.text-bold STATISTIC
+        h2.text-grey-dark.mt-4.text-bold Gender Ratio
+        #chart.mt-4.items-center(style='max-width:100%;height:auto;')
+        h2.text-grey-dark.mt-4.text-bold Data input student
+        select.text-grey-dark.shadow(name='thn' onchange='this.form.submit()')
+            each val in obj3
+                option(value=val selected=sval==val) #{val}
+        #chart2.mt-4.items-center
+        script.
+          var chart = c3.generate({
+              bindto: '#chart',
+              data: {
+                  // iris data from R
+                  columns: !{obj2},
+                  type : 'pie',
+                  onclick: function (d, i) { console.log("onclick", d, i); },
+                  onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+                  onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+              }
+          });
+
+
+            var chart = c3.generate({
+                bindto: '#chart2',
+                data: {
+                    x: 'MONTH',
+                    columns: !{obj1},
+                    types: {
+                        FREKUENSI: 'area-spline',
+                    }
+                } , 
+                axis: {
+                        x: {
+                            type: 'category',
+                        }
+                    }
+            });             
+
+
+
+        

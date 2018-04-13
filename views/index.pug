@@ -1,0 +1,44 @@
+extends layout
+
+block content
+    .container.text-center.pt-6
+      h1.text-grey-dark.mt-4.text-bold= title 
+      form.form-inline.mt-4(method='GET')
+        input.input-index.border.mr-sm-4.rounded(type='text', placeholder='Search' name='keyword' value=skeyword)       
+        select.option-index.border.mr-sm-4.bg-white(name='sort')
+          option(value='desc' selected=ssort=='desc') desc        
+          option(value='asc' selected=ssort=='asc') asc
+        select.option-index.border.mr-sm-4.bg-white(name='by')
+          option(value='id_student' selected=sby=='id_student') ID
+          option(value='name' selected=sby=='name') name
+          option(value='address' selected=sby=='address') address
+          option(value='email' selected=sby=='email') email
+        button.items-center.bg-grey-darker.text-white.font-bold.py-2.px-4.rounded.mr-sm-4(type='submit' class='hover:bg-blue-dark') 
+          i.fas.fa-filter.mr-1
+          | Filter   
+      .table-responsive
+        table.table.table-hover.table-bordered.text-center.items-center.bg-white.shadow-md
+          thead.thead-dark.text-grey-light
+            tr
+              th ID_STUDENT
+              th Name
+              th Address
+              th Email
+              th Admission Date
+              th(width="10%")
+          tbody.items-center.text-grey-darkest.text-md
+            for student in data
+              tr
+                td= student.id_student
+                td= student.name
+                td= student.address
+                td= student.email
+                td= moment(student.adm_date).format('DD-MM-YYYY')
+                td.flex.text-center
+                  form.mr-3(action='/delete/'+student.id_student, method='POST' onclick="return confirm('Are you sure you want to delete this item?')")
+                    button.bg-red.text-white.border-b-4.border-red-dark.font-bold.py-1.px-3.rounded(type='submit', class='hover:bg-red-light')
+                      i.fas.fa-times
+                  form(action='/student/'+student.id_student)
+                    button.bg-blue.text-white.border-b-4.border-blue-dark.font-bold.py-1.px-3.rounded(type='submit', class='hover:bg-blue-light')
+                      i.fas.fa-edit
+                

@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  .container
+    .text-white.text-center.mt-8.text-5xl.font-bold.font-sans.mb-8
+      i.fas.fa-home.mr-2(style='font-size:2em')
+      | Student Information System
+    .row.bg-grey-dark.rounded.full-rounded
+      .col-sm.mt-8.pt-8.pb-8.text-center
+        a.block.text-white.mr-8.ml-4.text-center(href='/login', class='lg:inline-block hover:text-grey')
+          i.fas.fa-sign-in-alt.mr-1.mb-2(style='font-size:10em')
+          .text-white.center(style='font-size:2em')
+            | LOGIN
+      .col-sm.mt-8.pt-8.pb-8.text-center
+        a.block.text-white.mr-8.ml-4.text-center(href='/register', class='lg:inline-block hover:text-grey')
+          i.fas.fa-user-plus.mr-1.mb-2(style='font-size:10em')
+          .text-white(style='font-size:2em')
+            | SIGN UP
+      .col-sm.mt-8.pt-8.pb-8.text-center
+        a.block.text-white.mr-8.ml-4.text-center(href='#', class='lg:inline-block hover:text-grey')
+          i.fas.fa-signal.mr-1.mb-2(style='font-size:10em')
+          .text-white(style='font-size:2em')
+            | STATISTIC
+    .text-white.text-center.mt-8.font-bold.font-sans.mb-8
+      i.fas.fa-home.mr-2(style='font-size:1em')
+      | Powered by az
+
+    

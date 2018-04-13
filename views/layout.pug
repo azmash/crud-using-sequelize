@@ -1,0 +1,130 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(href='https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
+    script(type='text/javascript', src='https://www.gstatic.com/charts/loader.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.21/c3.min.js')
+    script(type='text/javascript', src='//cdnjs.cloudflare.com/ajax/libs/d3/3.5.0/d3.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.21/c3.js')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.21/c3.css', rel='stylesheet', type='text/css')    
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.21/c3.min.css', rel='stylesheet', type='text/css')   
+    script(defer='', src='https://use.fontawesome.com/releases/v5.0.8/js/solid.js', integrity='sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l', crossorigin='anonymous')
+    script(defer='', src='https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js', integrity='sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c', crossorigin='anonymous')
+    style.
+      body { 
+          padding-top: 50px; 
+      }
+
+      .option-index, .input-index {
+        width:250px;
+        height:40px;
+        }
+      
+      #chart{
+          width: 100%;
+          min-height: 400px;
+        }
+
+      #ihome, #istat, #isetting {
+            color: #fff;
+            text-shadow: 1px 1px 1px #ccc;
+            font-size: 1.5em;
+        }
+        /* Dropdown Button */
+      .dropbtn {
+      color: #DAE1E7;
+      padding: 12px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+      }
+      /* Dropdown button on hover & focus */
+      .dropbtn:hover, .dropbtn:focus {
+      background-color: #6d7070;
+      }
+      /* The container <div> - needed to position the dropdown content */
+      .dropdown {
+      float: right;  
+      position: relative;
+      display: inline-block;
+      }
+      /* Dropdown Content (Hidden by Default) */
+      .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      right:0 ;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      }
+      /* Links inside the dropdown */
+      .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      }
+      /* Change color of dropdown links on hover */
+      .dropdown-content a:hover {
+        background-color: grey;
+        color: white}
+      /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+      .show {display:block;}
+
+    nav.flex.items-center.bg-black.p-2.fixed-top.justify-between.flex-wrap
+      .w-full.block.flex-grow(class='lg:flex lg:items-center lg:w-auto')
+        .text-md(class='lg:flex-grow')
+          a.block.text-grey-light.mr-8(href='/', class='lg:inline-block hover:text-white')
+            #ihome
+              i.fas.fa-home
+          a.block.text-grey-light.mr-8.ml-4(href='/stat/', class='lg:inline-block hover:text-white')
+            i.fas.fa-chart-pie.mr-1
+            | Statistic
+          a.block.text-grey-light.mr-8.ml-4(href='/student', class='lg:inline-block hover:text-white')
+            i.fas.fa-bars.mr-1
+            | Student List
+          a.block.text-grey-light.mr-8.ml-4(href='/form', class='lg:inline-block hover:text-white')
+            i.fas.fa-clone.mr-1
+            | Add Data          
+        .dropdown
+          button.dropbtn(onclick='myFunction()')
+            i.fas.fa-cogs(onclick='myFunction()')
+            i.fas.fa-caret-down(onclick='myFunction()')
+          #myDropdown.dropdown-content
+            a
+              | Hi,  #{username}
+            a(href='/adminlist') 
+              i.fas.fa-bars.mr-2
+              | Admin List
+            a(href='/addadmin') 
+              i.fas.fa-clone.mr-2
+              | Add Admin
+            a(href='/logout')
+              i.fas.fa-sign-out-alt.mr-2
+              | Log Out 
+               
+            
+    script.
+      /* When the user clicks on the button,
+      toggle between hiding and showing the dropdown content */
+      function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+      }
+      // Close the dropdown if the user clicks outside of it
+      window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+      openDropdown.classList.remove('show');
+      }
+      }
+      }
+      }
+  body.bg-grey-lightest
+    block content

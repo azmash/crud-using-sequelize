@@ -1,0 +1,59 @@
+extends layout
+
+block content
+    .container.mx-auto.pt-4                 
+      form.w-full.max-w-md.bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8(action='/', method='POST')
+        .text-center
+          label.block.text-grey-darker.text-xl.font-bold.mb-6.mt-4
+            | INPUT DATA
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+              | ID STUDENT
+          .col
+            input#id_student.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "id_student" value = sid, disabled)
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+              | Name
+          .col
+            input#name.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "name" value = sname)
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4
+              | Email
+          .col
+            input#email.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "email" value = semail)        
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+              | Address
+          .col
+            textarea#address.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "address" )=saddress
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4
+              | Gender
+          .col.text-grey
+            input#gender(type='radio', name='gender', value='m' checked=sgender=='m')
+            |  Male      
+            input#gender.ml-4(type='radio', name='gender', value='f' checked=sgender=='f')
+            |  Female
+        .flex.items-center.mb-6
+          .col-4
+            label.block.text-grey-darker.font-bold.text-left.mb-1.mb-0.pr-4(for='inline-full-name')
+              | Date of Birth
+          .col.text-grey
+            input#date_of_birth.bg-grey-lighter.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple', type='date', name='dob', value=sdob)
+        .flex.items-center.mb-6
+          .col-4
+          .col.text-red  
+            |
+            - if(error_add){
+            .bg-red-lightest.border.border-red-light.text-red-dark.px-4.py-3.rounded.relative(role='alert') #{error_add}
+            - }         
+        .flex.items-center
+          .col-4
+          .col
+            button.shadow.bg-purple.text-white.font-bold.py-2.px-4.rounded(class='hover:bg-purple-light', type='submit' , value='submit')
+              | INPUT

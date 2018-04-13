@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  .container.text-center.pt-8
+    |
+    - if(message){
+    .bg-green-lightest.border-green-light.text-green-dark.text-2xl.rounded.mb-8 #{message}
+    - }  
+    .text-grey-darker.text-center.text-5xl.font-bold.font-sans.mb-4
+      i.fas.fa-home.mr-2(style='font-size:2em')
+      | Student Information System
+    .row.bg-grey-dark.rounded.full-rounded.shadow-md
+      .col-sm.mt-8.pt-8.pb-8.text-center
+        a.block.text-white.mr-8.ml-4.text-center(href='/student', class='lg:inline-block hover:text-grey')
+          i.fas.fa-bars.mr-1.mr-1.mb-2(style='font-size:10em')
+          .text-white.center(style='font-size:2em')
+            | STUDENT LIST
+      .col-sm.mt-8.pt-8.pb-8.text-center
+        a.block.text-white.mr-8.ml-4.text-center(href='/form', class='lg:inline-block hover:text-grey')
+          i.fas.fa-user-plus.mr-1.mb-2(style='font-size:10em')
+          .text-white(style='font-size:2em')
+            | ADD STUDENT
+      .col-sm.mt-8.pt-8.pb-8.text-center
+        a.block.text-white.mr-8.ml-4.text-center(href='/stat/', class='lg:inline-block hover:text-grey')
+          i.fas.fa-signal.mr-1.mb-2(style='font-size:10em')
+          .text-white(style='font-size:2em')
+            | STATISTIC
+    .text-white.text-center.mt-8.font-bold.font-sans.mb-8
+      i.fas.fa-home.mr-2(style='font-size:1em')
+      | Powered by az
+      
+
+    
