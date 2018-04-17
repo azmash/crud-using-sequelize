@@ -1,0 +1,68 @@
+extends layout
+
+block content
+    .container.mx-auto.pt-4
+      .w-full.max-w-lg.bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8
+        form#f(method='POST' action='/setting')
+          |
+          - if(failed){
+          .bg-red-lightest.border.border-red-light.text-red-dark.px-4.py-3.rounded.relative(role='alert') #{failed}
+          - }
+          |
+          - if(valid){
+          .bg-green-lightest.border.border-green-light.text-green-dark.px-4.py-3.rounded.relative(role='alert') #{valid}
+          - }  
+          .text-center
+            label.block.text-grey-darker.text-xl.font-bold.mb-2.mt-4
+              | SECURITY  
+          .bg-grey-lightest.border.border-blue.text-blue-dark.px-4.py-3.mb-4(role='alert')
+            p.font-bold Code generator 
+            p.text-sm You can use Code Generator to generate login codes. Set up a third-party app to generate codes. 
+          .flex.items-center.mb-4.text-center
+            .col.text-grey-darker
+              input#disable(type='radio', name='two_fa', value='disable' checked=stwo_fa=='disable' onclick="clicked(event)")
+              |  Disable &nbsp     
+              input#enable(type='radio', name='two_fa', value='enable' checked=stwo_fa=='enable' onclick="this.form.submit();")
+              |  Enable
+          script(type="text/javascript").
+            function clicked(e)
+            {
+                if(!confirm('Are you sure?'))e.preventDefault();
+                else {document.getElementById('f').submit()}
+            }
+        |
+        - if(enable){
+          .w-full.bg-blue-lightest.shadow-md.rounded.px-8.pt-6.pb-8.mb-4.mx-auto.mt-8.text-blue-dark
+            .bg-grey-lightest.border.border-green-light.text-grey-darkest.px-4.py-3.rounded.relative.mb-4(role='alert')
+              label.font-bold Set Up a Third Party App to Generate Codes 
+              label.text-sm To get a third-party app working, either scan the QR code below or type the secret key into the app. 
+            .flex.mb-6
+              .col-3
+                label.block.text-grey-darker.text-left.mb-1.mb-0.pr-4.text-sm(for='inline-full-name')
+                  | Qr-image
+              .col
+                img(src=ssrc, alt='SecretKey Barcode')
+            .flex.mb-6
+              .col-3
+                label.block.text-grey-darker.text-left.mb-1.mb-0.pr-4.text-sm(for='inline-full-name')
+                  | Secret Key
+              .col
+                label.block.text-black.font-bold.text-left.mb-1.mb-0.pr-4.text-sm(for='inline-full-name' )  #{enable}
+            form(action='/settingp/')
+              .flex.items-center.mb-6
+                .col-3
+                  label.block.text-grey-darker.text-left.mb-1.mb-0.pr-4.text-sm(for='inline-full-name')
+                    | Security Code
+                .col
+                  input#token.bg-white.border-grey-lighter.rounded.w-full.py-2.px-4.text-grey-darker(class='hover:border-purple' name = "token" value=stoken)
+              .flex.items-center.text-center
+                .col
+                  button.shadow.bg-grey-darkest.text-white.font-bold.py-2.px-4.rounded.mb-2(class='hover:bg-purple-light', type='submit' , value='submit')
+                    | CHECK 
+            |
+            - if(valid){
+              form.text-center(method='POST' action='/settingcon')
+                button.shadow.bg-grey-darkest.text-white.font-bold.py-2.px-4.rounded.mb-2(class='hover:bg-purple-light', type='submit' , value='submit')
+                  | CONFIRM 
+            - }  
+        - }    

@@ -42,13 +42,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
 
-// sequelize.authenticate()
-// .then(() => {
-//   console.log('conn success');
-// })
-// .catch(() => {
-//   console.error('conn error',err);
-// })
+sequelize.authenticate()
+.then(() => {
+  console.log('conn success');
+})
+.catch(() => {
+  console.error('conn error',err);
+})
 
 
 // student.findAll().then(user => {
@@ -124,8 +124,7 @@ passport.deserializeUser(function(id, done){
     where: {
       id: [id]
     }
-  }).then(function(rows, err) {
-    
+  }).then(function(rows, err) {   
     done(err, rows[0]);
   })
   // var sql = "select * from users where id= "+ con.escape(id);
@@ -134,6 +133,9 @@ passport.deserializeUser(function(id, done){
   // });
 });
 
+app.get('/coba', function(req, res) {
+  res.render('coba')
+})
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated())

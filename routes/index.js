@@ -13,6 +13,20 @@ const student = require('../src/seq_tb_student');
 const users = require('../src/seq_tb_user');
 const Sequelize = require ('sequelize');
 const sequelize = require('../src/seq_con');
+const twoFactor = require('node-2fa');
+
+/*
+{ secret: 'XDQXYCP5AC6FA32FQXDGJSPBIDYNKK5W',
+  uri: 'otpauth://totp/My Awesome App:johndoe%3Fsecret=XDQXYCP5AC6FA32FQXDGJSPBIDYNKK5W',
+  qr: 'https://chart.googleapis.com/chart?chs=166x166&chld=L|0&cht=qr&chl=otpauth://totp/My Awesome App:johndoe%3Fsecret=XDQXYCP5AC6FA32FQXDGJSPBIDYNKK5W' 
+}
+*/
+ 
+// var newToken = twoFactor.generateToken('4VO5ZJLD62ZMZ7HO2MFPFISK2MZEJUDM')
+// console.log(newToken)
+// twoFactor.verifyToken('4VO5ZJLD62ZMZ7HO2MFPFISK2MZEJUDM', '041316');
+
+
 const op = Sequelize.Op;
 
 var router = express.Router();
@@ -175,6 +189,136 @@ router.post('/addadmin', function(req, res) {
 // });
 
 
+router.get('/setting', function(req, res) {
+  users.findAll({
+    where: {
+      username: [req.user.username]
+    }
+  }).then(function(rows) {
+    res.render('setting', {stwo_fa: rows[0].two_fa})
+  })
+})
+
+
+// router.get('/d', function(req, res) {  
+//   users.findAll({
+//     where: {
+//       username: [req.user.username]
+//     }
+//   }).then(function(rows) {
+//     var code = qr.image('otpauth://totp/'+rows[0].username+'?secret='+rows[0].secretkey, { type: 'png' });   
+//     res.setHeader('Content-type', 'image/png'); 
+//     code.pipe(res);
+//     // res.render('coba')
+//   })
+// });
+
+router.post('/setting', function(req, res) {
+  console.log(req.body.two_fa)
+  if (req.body.two_fa == 'disable') {
+    users.update({
+      two_fa: 'disable'
+    }, {where: {
+      username: [req.user.username]
+    }}).then(function(rows) {
+      req.flash('success','Two-factor authenticated is disabled')
+      res.render('setting', {stwo_fa: req.body.two_fa, 'valid': req.flash('success')})
+    })
+  } else if (req.body.two_fa == 'enable') {
+    users.findAll({
+      where: {
+        username: [req.user.username]
+      }
+    }).then(function(rows) {
+      if (rows[0].two_fa == 'enable') {
+        var newToken = twoFactor.generateToken(rows[0].secretkey)
+        console.log(newToken)
+        var newSecret = rows[0].secretkey
+        req.flash('code',newSecret)
+        res.render('setting', {'enable' : req.flash('code'),ssrc: rows[0].url_qr, stwo_fa: req.body.two_fa})
+        // var nsecret = twoFactor.generateSecret({name: 'Student system', account: req.user.username});
+        // users.update({
+        //   secretkey: nsecret.secret,
+        //   url_qr: nsecret.qr
+        // }, {where: {
+        //   username: [req.user.username]
+        // }}).then(function(rows) {
+        //   users.findAll({
+        //     where: {
+        //       username: [req.user.username],
+        //     }
+        //   }).then(function(rows) {
+        //     var newSecret = rows[0].secretkey
+        //     req.flash('code',newSecret)
+        //     res.render('setting', {stwo_fa: req.body.two_fa, 'enable' : req.flash('code'),ssrc: nsecret.qr})
+        //   })
+        // })
+      } else {
+        var nsecret = twoFactor.generateSecret({name: 'Student system', account: req.user.username});
+        var newToken = twoFactor.generateToken(nsecret.secret)
+        console.log(newToken)
+        users.update({
+          secretkey: nsecret.secret,
+          url_qr: nsecret.qr
+        }, {where: {
+          username: [req.user.username]
+        }}).then(function(rows) {
+          users.findAll({
+            where: {
+              username: [req.user.username],
+            }
+          }).then(function(rows) {
+            var newSecret = rows[0].secretkey
+            req.flash('code',newSecret)
+            res.render('setting', {'enable' : req.flash('code'),ssrc: nsecret.qr, stwo_fa: req.body.two_fa})
+          })
+        })
+        // console.log(twoFactor.generateToken(rows[0].secretkey))
+        // req.flash('code',rows[0].secretkey)
+        // res.render('setting', {stwo_fa: req.body.two_fa, 'enable' : req.flash('code'), ssrc: rows[0].url_qr})
+      }
+    })     
+  }
+})
+
+router.get('/settingp/',function(req, res) {
+  users.findAll({
+    where: {
+      username: req.user.username
+    }
+  }).then(function(rows) {
+    var verifytoken = twoFactor.verifyToken(rows[0].secretkey, req.query.token);
+    console.log(req.query.token)
+    if (verifytoken !== null) {
+      // users.update({
+      //   two_fa: 'enable',
+      // }, {where: {
+      //   username: [req.user.username]
+      // }}
+      // ).then(function(update) {
+        req.flash('valid','valid token')
+        req.flash('code',rows[0].secretkey)
+        res.render('setting',{'valid': req.flash('valid'), stwo_fa: 'enable', 'enable': req.flash('code'),ssrc: rows[0].url_qr, stoken: req.query.token})
+      // })
+    } else {
+      req.flash('failed','wrong token, try again !')
+      req.flash('code',rows[0].secretkey)
+      res.render('setting',{'failed': req.flash('failed'), stwo_fa: 'disable', 'enable': req.flash('code'),ssrc: rows[0].url_qr, stoken: req.query.token})
+    }
+    console.log(twoFactor.verifyToken(rows[0].secretkey, req.query.token));
+  })
+})
+
+router.post('/settingcon', function(req,res) {
+  users.update({
+    two_fa: 'enable'
+  }, { where: {
+    username: req.user.username
+  }}).then(function(rows) {
+    req.flash('success', 'Two-factor authentication is enabled')
+    res.render('setting',{'valid': req.flash('success'), stwo_fa: 'enable'})
+  })
+})
 
 router.get('/form', function(req, res) {
   res.render('form')

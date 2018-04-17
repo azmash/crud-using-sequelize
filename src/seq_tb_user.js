@@ -15,7 +15,10 @@ const users = sequelize.define('users', {
   pw_token: Sequelize.STRING,
   pw_exp: Sequelize.DATE,
   reg_token: Sequelize.STRING,
-  status: Sequelize.STRING
+  status: Sequelize.STRING,
+  secretkey: Sequelize.STRING,
+  two_fa: Sequelize.ENUM('enable','disable'),
+  url_qr: Sequelize.STRING
 })
 
 module.exports = users;

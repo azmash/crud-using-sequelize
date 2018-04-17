@@ -1,11 +1,11 @@
 var gulp = require('gulp');
-var browserSync = require('browser-sync');
+// var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 var connect = require('gulp-connect')
 
-// we'd need a slight delay to reload browsers
-// connected to browser-sync after restarting nodemon
-var BROWSER_SYNC_RELOAD_DELAY = 500;
+// // we'd need a slight delay to reload browsers
+// // connected to browser-sync after restarting nodemon
+// var BROWSER_SYNC_RELOAD_DELAY = 500;
 
 gulp.task('nodemon', function (cb) {
   var called = false;
@@ -69,14 +69,14 @@ gulp.task('js',  function () {
     //.pipe(gulp.dest('...'));
 });
 
-gulp.task('css', function () {
-  return gulp.src('public/**/*.css')
-    .pipe(browserSync.reload({ stream: true }));
-})
+// gulp.task('css', function () {
+//   return gulp.src('public/**/*.css')
+//     .pipe(browserSync.reload({ stream: true }));
+// })
 
-gulp.task('bs-reload', function () {
-  browserSync.reload();
-});
+// gulp.task('bs-reload', function () {
+//   browserSync.reload();
+// });
 
 // gulp.task('default', ['browser-sync'], function () {
 //   gulp.watch('public/**/*.js',   ['js', browserSync.reload]);

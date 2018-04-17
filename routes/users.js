@@ -13,6 +13,7 @@ const schemareg= require('../src/joi_reg');
 const users = require('../src/seq_tb_user');
 const Sequelize = require ('sequelize');
 const sequelize = require('../src/seq_con');
+const twoFactor = require('node-2fa');
 const op = Sequelize.Op;
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -29,31 +30,90 @@ router.get('/login', function(req, res){
 });
 
 
-// router.get('/signin', function(req, res, next) {
-//   passport.authenticate('local', function(err, user, info) {
-//     console.log(req.body.username)
-//     if (err) { return next(err); }
-//     if (!user) { return res.redirect('/login'); }
-//     req.logIn(user, function(err) {
-//       if (err) { return next(err); }
-      // req.flash('info', 'You successfully logged in')  
-      // return res.redirect('/' , {'info' :req.flash('info')});
-//     });
-//   })(req, res, next);
-// });
+router.get('/signin', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    console.log(req.query.username)
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/login'); }
+    users.findAll({
+      where: {
+        username: req.query.username
+      }
+    }).then(function(rows) {
+      console.log(rows[0].two_fa)
+      if (rows[0].two_fa == 'disable') {
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          req.flash('info', 'Hi ' + req.user.username + ', You successfully logged in')  
+          return res.redirect('/' );
+        });
+      } else {
+        req.flash('username',req.query.username)
+        res.redirect('/two_fa/')
+      }
+    })
+  })(req, res, next);
+});
 
-router.post('/signin',
-  passport.authenticate('local', { 
-  failureRedirect: '/login',
-  failureFlash: true,
-  successFlash: 'Welcome!' }),
-  function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    req.flash('info', 'Hi ' + req.user.username + ', You successfully logged in') 
-    res.redirect('/') 
-    // res.render('home' , {'info' :req.flash('info'), username: req.user.username});
-  });
+router.get('/two_fa/', function(req, res) {
+ // console.log('username ',req.params.username )
+  var f = req.flash('username');
+  console.log(f.toString())
+  res.render('login/two_fa', {susername: f.toString()})
+})
+
+router.post('/two_fa/', function(req, res) {
+  console.log(req.body.username)
+  users.findAll({
+    where: {
+      username: [req.body.username]
+    }
+  }).then(function(rows) {
+    var verifytoken = twoFactor.verifyToken(rows[0].secretkey, req.body.token);
+    console.log(req.body.token)
+    var newToken = twoFactor.generateToken(rows[0].secretkey)
+    console.log(newToken)
+    if (verifytoken !== null) {
+      users.findOne({
+        where: {
+          username: [req.body.username]
+        },
+        attributes: ['id', 'username', 'password']
+      }).then(user => 
+        req.login(user, function (err) {
+          if (err) {
+            req.flash('error', err.message);
+            console.log('user',user)
+            return res.redirect('back');
+          }
+          console.log('Logged user in using Passport req.login()');
+          console.log('username',req.user.username);
+          req.flash('info', 'Hi '+req.user.username+', you successfully logged in')
+          res.redirect('/')
+        })
+      ) 
+    } else {
+      req.flash('failed','wrong token, try again !')
+      res.render('login/two_fa',{'error': req.flash('failed'),stoken: req.body.token, susername: req.body.username})
+    }
+  }).catch(error => {
+    req.flash('failed','wrong token, try again !')
+    res.render('login/two_fa',{'error': req.flash('failed'),stoken: req.body.token, susername: req.body.username})
+  })
+})
+
+// router.post('/signin',
+//   passport.authenticate('local', { 
+//   failureRedirect: '/login',
+//   failureFlash: true,
+//   successFlash: 'Welcome!' }),
+//   function(req, res) {
+//     // If this function gets called, authentication was successful.
+//     // `req.user` contains the authenticated user.
+//     req.flash('info', 'Hi ' + req.user.username + ', You successfully logged in') 
+//     res.redirect('/') 
+//     // res.render('home' , {'info' :req.flash('info'), username: req.user.username});
+//   });
 
 // router.post(
 //   '/signin',
@@ -171,7 +231,8 @@ router.get('/confirmreg/:token', function(req, res) {
 
 router.post('/confirmreg/:token', function(req, res, next) {
   var pass = bcrypt.hashSync(req.body.password);
-  var user = {password: pass, reg_token: '', status: 'active'}
+  var nsecret = twoFactor.generateSecret({name: 'Student system', account: req.body.username});
+  var user = {password: pass, reg_token: '', status: 'active', secretkey: nsecret.secret, url_qr:nsecret.qr}
   schemareg.validate({ password: req.body.password}, function(err, value) {
     if (err) {
       req.flash('error', err)
@@ -307,6 +368,12 @@ router.get('/reset/:token', function(req, res) {
     console.log(min);
 
     if (min >=160) {
+      users.update(
+        {pw_token: null, pw_exp: null},
+        { where: {pw_token: [req.params.token]}}
+      ).then().catch(function(err) {
+        console.log(err)
+      })
       req.flash('error', 'Password reset token is invalid or has expired.');
       return res.render('login/forgot', {'error' :req.flash('error')});
     }
