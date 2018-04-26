@@ -4,6 +4,7 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(href='/stylesheets/style.css', rel='stylesheet')
     script(type='text/javascript', src='/javascripts/modal.js')
+    script(src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js")
     link(href='https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css', rel='stylesheet')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
     script(type='text/javascript', src='https://www.gstatic.com/charts/loader.js')
@@ -16,7 +17,6 @@ html
     script(defer='', src='https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js', integrity='sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c', crossorigin='anonymous')
     link(href='https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css', rel='stylesheet')
     script(src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js')
-
     style.
       body { 
           padding-top: 50px; 
@@ -82,78 +82,57 @@ html
       .option-index, .input-index {
       width:250px;
       height:40px;
-      }      
-
-      body {font-family: Arial, Helvetica, sans-serif;}
-      /* The Modal (background) */
-      .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }          
+  body.bg-grey-lightest
+    #app
+      nav.flex.items-center.bg-black.p-2.fixed-top.justify-between.flex-wrap
+        #ihome.flex.items-center.flex-no-shrink.text-white.mr-6
+          a.block.text-grey-light.mr-8(href='/', class='md:inline-block hover:text-white')
+            i.fas.fa-home
+        .block(class='md:hidden')
+          button.flex.items-center.px-3.py-2.border.rounded.text-teal-lighter.border-teal-light(@click='toggle', class='hover:text-white hover:border-white')
+            svg.fill-current.h-3.w-3(viewbox='0 0 20 20', xmlns='http://www.w3.org/2000/svg')
+              title Menu
+              path(d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z')
+        .w-full.block.flex-grow(:class="open ? 'block': 'hidden'", class='md:flex md:items-center md:w-auto')
+          .text-md(class='md:flex-grow')
+            a.block.text-grey-light.mr-8.ml-4(href='/stat/', class='md:inline-block hover:text-white')
+              i.fas.fa-chart-pie.mr-1
+              | Statistic
+            a.block.text-grey-light.mr-8.ml-4(href='/student', class='md:inline-block hover:text-white')
+              i.fas.fa-bars.mr-1
+              | Student List
+            a.block.text-grey-light.mr-8.ml-4(href='/form', class='md:inline-block hover:text-white')
+              i.fas.fa-clone.mr-1
+              | Add Data
+          .dropdown
+            button.dropbtn(onclick='myFunction()')
+              i.fas.fa-cogs(onclick='myFunction()')
+              i.fas.fa-caret-down(onclick='myFunction()')
+            #myDropdown.dropdown-content
+              a
+                | Hi,  #{username}
+              a(href='#') 
+                i.fas.fa-users.mr-2
+                | Edit Profile
+              a(href='/setting') 
+                i.fas.fa-cog.mr-2
+                | Settings
+              a(href='/logout')
+                i.fas.fa-sign-out-alt.mr-2
+                | Log Out                  
+    script.
+      new Vue({
+      el: '#app',
+      data: {
+      open: false,
+      },
+      methods: {
+      toggle() {
+      this.open = !this.open
       }
-      /* Modal Content */
-      .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 60%;
       }
-      /* The Close Button */
-      .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      }
-      .close:hover,
-      .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-      }
-
-    nav.flex.items-center.bg-black.p-2.fixed-top.justify-between.flex-wrap
-      .w-full.block.flex-grow(class='lg:flex lg:items-center lg:w-auto')
-        .text-md(class='lg:flex-grow')
-          a.block.text-grey-light.mr-8(href='/', class='lg:inline-block hover:text-white')
-            #ihome
-              i.fas.fa-home
-          a.block.text-grey-light.mr-8.ml-4(href='/stat/', class='lg:inline-block hover:text-white')
-            i.fas.fa-chart-pie.mr-1
-            | Statistic
-          a.block.text-grey-light.mr-8.ml-4(href='/student', class='lg:inline-block hover:text-white')
-            i.fas.fa-bars.mr-1
-            | Student List
-          a.block.text-grey-light.mr-8.ml-4(href='/form', class='lg:inline-block hover:text-white')
-            i.fas.fa-clone.mr-1
-            | Add Data          
-        .dropdown
-          button.dropbtn(onclick='myFunction()')
-            i.fas.fa-cogs(onclick='myFunction()')
-            i.fas.fa-caret-down(onclick='myFunction()')
-          #myDropdown.dropdown-content
-            a
-              | Hi,  #{username}
-            a(href='#') 
-              i.fas.fa-users.mr-2
-              | Edit Profile
-            a(href='/setting') 
-              i.fas.fa-cog.mr-2
-              | Settings
-            a(href='/logout')
-              i.fas.fa-sign-out-alt.mr-2
-              | Log Out 
-               
-            
+      })
     script.
       /* When the user clicks on the button,
       toggle between hiding and showing the dropdown content */
@@ -172,8 +151,6 @@ html
       }
       }
       }
-      }
-
-
-  body.bg-grey-lightest
+      }      
+      
     block content

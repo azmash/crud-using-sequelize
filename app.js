@@ -42,18 +42,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
 
-sequelize.authenticate()
-.then(() => {
-  console.log('conn success');
-})
-.catch(() => {
-  console.error('conn error',err);
-})
 
 
-// student.findAll().then(user => {
-//   console.log(user)
-// })
+student.findAll().then(user => {
+  console.log(user)
+})
 
 app.use(sess({
    name: 'JSESSION',

@@ -1,7 +1,8 @@
 const Sequelize = require ('sequelize');
+const conn = require('../conf/config');
 
-const sequelize = new Sequelize('stu', 'root', '', {
-  host: 'localhost',
+const sequelize = new Sequelize(conn.db.database, conn.db.user, conn.db.password, {
+  host: conn.db.host,
   dialect: 'mysql',
   operatorsAliases: false,
   define: {

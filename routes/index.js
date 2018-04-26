@@ -59,7 +59,7 @@ router.get('/adminlist', function(req, res) {
   users.findAll({
     order : ['id']
   }).then(function(rows) {
-    res.render('adminlist', {title: 'ADMIN LIST', data: rows});
+    res.render('adminlist', {title: 'ADMIN LIST', data: rows, username: req.user.username});
   }).catch(function(error) {
     res.status(500).json({"status_code": 500,"status_message": "internal server error"});
   })
@@ -73,7 +73,7 @@ router.get('/adminlist', function(req, res) {
 });
 
 router.get('/addadmin', function(req, res){
-  res.render('addadmin');
+  res.render('addadmin', {username: req.user.username});
 });
 
 router.post('/addadmin', function(req, res) {
@@ -195,7 +195,7 @@ router.get('/setting', function(req, res) {
       username: [req.user.username]
     }
   }).then(function(rows) {
-    res.render('setting', {stwo_fa: rows[0].two_fa})
+    res.render('setting', {stwo_fa: rows[0].two_fa, username: req.user.username})
   })
 })
 
@@ -222,7 +222,7 @@ router.post('/setting', function(req, res) {
       username: [req.user.username]
     }}).then(function(rows) {
       req.flash('success','Two-factor authenticated is disabled')
-      res.render('setting', {stwo_fa: req.body.two_fa, 'valid': req.flash('success')})
+      res.render('setting', {stwo_fa: req.body.two_fa, 'valid': req.flash('success'), username: req.user.username})
     })
   } else if (req.body.two_fa == 'enable') {
     users.findAll({
@@ -235,7 +235,7 @@ router.post('/setting', function(req, res) {
         console.log(newToken)
         var newSecret = rows[0].secretkey
         req.flash('code',newSecret)
-        res.render('setting', {'enable' : req.flash('code'),ssrc: rows[0].url_qr, stwo_fa: req.body.two_fa})
+        res.render('setting', {'enable' : req.flash('code'),ssrc: rows[0].url_qr, stwo_fa: req.body.two_fa, username: req.user.username})
         // var nsecret = twoFactor.generateSecret({name: 'Student system', account: req.user.username});
         // users.update({
         //   secretkey: nsecret.secret,
@@ -270,7 +270,7 @@ router.post('/setting', function(req, res) {
           }).then(function(rows) {
             var newSecret = rows[0].secretkey
             req.flash('code',newSecret)
-            res.render('setting', {'enable' : req.flash('code'),ssrc: nsecret.qr, stwo_fa: req.body.two_fa})
+            res.render('setting', {'enable' : req.flash('code'),ssrc: nsecret.qr, stwo_fa: req.body.two_fa, username: req.user.username})
           })
         })
         // console.log(twoFactor.generateToken(rows[0].secretkey))
@@ -298,12 +298,12 @@ router.get('/settingp/',function(req, res) {
       // ).then(function(update) {
         req.flash('valid','valid token')
         req.flash('code',rows[0].secretkey)
-        res.render('setting',{'valid': req.flash('valid'), stwo_fa: 'enable', 'enable': req.flash('code'),ssrc: rows[0].url_qr, stoken: req.query.token})
+        res.render('setting',{'valid': req.flash('valid'), stwo_fa: 'enable', 'enable': req.flash('code'),ssrc: rows[0].url_qr, stoken: req.query.token, username: req.user.username})
       // })
     } else {
       req.flash('failed','wrong token, try again !')
       req.flash('code',rows[0].secretkey)
-      res.render('setting',{'failed': req.flash('failed'), stwo_fa: 'disable', 'enable': req.flash('code'),ssrc: rows[0].url_qr, stoken: req.query.token})
+      res.render('setting',{'failed': req.flash('failed'), username: req.user.username, stwo_fa: 'disable', 'enable': req.flash('code'),ssrc: rows[0].url_qr, stoken: req.query.token, username: req.user.username})
     }
     console.log(twoFactor.verifyToken(rows[0].secretkey, req.query.token));
   })
@@ -321,7 +321,7 @@ router.post('/settingcon', function(req,res) {
 })
 
 router.get('/form', function(req, res) {
-  res.render('form')
+  res.render('form', {username: req.user.username})
 })
 
 router.get('/student/', function(req, res, next) {
@@ -342,7 +342,7 @@ router.get('/student/', function(req, res, next) {
     [by , sort]
     ]
   }).then(rows => {
-    res.render('index', {title: 'STUDENT LIST', data:rows, skeyword: keyword, ssort: sort, sby: by});
+    res.render('index', {title: 'STUDENT LIST', data:rows, skeyword: keyword, ssort: sort, sby: by, username: req.user.username});
   })
 
   // var query = con.query("SELECT * FROM student WHERE ?? LIKE CONCAT('%', ? ,'%') ORDER BY ?? "+sort, [by, keyword, by], function(err, rows, fields) {
@@ -397,7 +397,8 @@ router.get('/student/:id', function(req, res) {
       saddress: rows[0].address,
       sgender: rows[0].gender,
       sdob: moment(rows[0].dob).format('YYYY-MM-DD'),
-      semail: rows[0].email
+      semail: rows[0].email,
+      username: req.user.username
       })
     }
   ).catch( error => {
@@ -568,7 +569,7 @@ router.get('/stat/',function(req, res)  {
         for (j = 0; j < rows.length; j++) {
           val.push(rows[j].dataValues.year)
         }
-        res.render('stat',{obj1: JSON.stringify(temp_monthfrek), obj2: JSON.stringify(trans_gend), obj3: val, sval: thn});
+        res.render('stat',{obj1: JSON.stringify(temp_monthfrek), obj2: JSON.stringify(trans_gend), obj3: val, sval: thn,username: req.user.username});
       }).catch(error => {
         console.log(error)
       });

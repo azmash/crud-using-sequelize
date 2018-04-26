@@ -29,6 +29,29 @@ router.get('/login', function(req, res){
   };
 });
 
+// router.post('/signin',
+//   passport.authenticate('local', { 
+//   failureRedirect: '/login',
+//   failureFlash: true,
+//   successFlash: 'Welcome!' }),
+//   function(req, res) {
+//     // If this function gets called, authentication was successful.
+//     // `req.user` contains the authenticated user.
+//     req.flash('info', 'Hi ' + req.user.username + ', You successfully logged in') 
+//     res.redirect('/') 
+//     // res.render('home' , {'info' :req.flash('info'), username: req.user.username});
+//   });
+
+// router.get('/signin', function(req, res, next) {
+//   passport.authenticate('local', function(err, user, info) {
+//     if (err) { return next(err); }
+//     if (!user) { return res.redirect('/login'); }
+//     req.logIn(user, function(err) {
+//       if (err) { return next(err); }
+//       return res.redirect('/');
+//     });
+//   })(req, res, next);
+// });
 
 router.get('/signin', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
@@ -60,6 +83,13 @@ router.get('/two_fa/', function(req, res) {
   var f = req.flash('username');
   console.log(f.toString())
   res.render('login/two_fa', {susername: f.toString()})
+  users.findAll({
+    where: {
+      username: [f.toString()]
+    }
+  }).then(function(rows) {
+    console.log(twoFactor.generateToken(rows[0].secretkey))
+  })
 })
 
 router.post('/two_fa/', function(req, res) {
@@ -102,18 +132,6 @@ router.post('/two_fa/', function(req, res) {
   })
 })
 
-// router.post('/signin',
-//   passport.authenticate('local', { 
-//   failureRedirect: '/login',
-//   failureFlash: true,
-//   successFlash: 'Welcome!' }),
-//   function(req, res) {
-//     // If this function gets called, authentication was successful.
-//     // `req.user` contains the authenticated user.
-//     req.flash('info', 'Hi ' + req.user.username + ', You successfully logged in') 
-//     res.redirect('/') 
-//     // res.render('home' , {'info' :req.flash('info'), username: req.user.username});
-//   });
 
 // router.post(
 //   '/signin',

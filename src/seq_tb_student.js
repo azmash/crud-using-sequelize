@@ -1,13 +1,6 @@
 const Sequelize = require ('sequelize');
 const sequelize = require('../src/seq_con');
 
-sequelize.authenticate()
-.then(() => {
-  console.log('conn success');
-})
-.catch(() => {
-  console.error('conn error',err);
-})
 
 const student = sequelize.define('student', {
   id_student: {

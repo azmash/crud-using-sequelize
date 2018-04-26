@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "nodemon ./bin/www"
+    "devstart": "nodemon ./bin/www",
+    "test": "node_modules/.bin/mocha"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.2.1",
@@ -47,6 +48,10 @@
     "session-memory-store": "^0.2.2"
   },
   "devDependencies": {
-    "gulp": "^4.0.0"
+    "chai": "^4.1.2",
+    "gulp": "^4.0.0",
+    "mocha": "^5.1.1",
+    "nock": "^9.2.5",
+    "supertest": "^3.0.0"
   }
 }

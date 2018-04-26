@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .container.text-center.pt-6
+    .container.text-center.mx-auto(class='md:mx-0')
       h1.text-grey-dark.mt-4.text-bold= title 
       form.form-inline.mt-4(method='GET')
         input.input-index.border.mr-sm-4.rounded(type='text', placeholder='Search' name='keyword' value=skeyword)       
