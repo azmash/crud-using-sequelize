@@ -1,5 +1,7 @@
 # Simple CRUD project
 
+[![Build Status](https://travis-ci.org/azmash/crud-using-sequelize.svg?branch=master)](https://travis-ci.org/azmash/crud-using-sequelize)
+
 This is simple project to create, read, update and delete student's data. include reset password content and add admin to access the project. This project is build with Express.js using Pug.
 This project using :
 1. Tailwind and Bootstrap 4.0.0 CSS
